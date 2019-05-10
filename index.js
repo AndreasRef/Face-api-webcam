@@ -54,13 +54,13 @@ async function run1() {
 async function run2() {
 
     //const mtcnnResults = await faceapi.ssdMobilenetv1(document.getElementById('inputVideo'))
-    const mtcnnResults = await faceapi.tinyFaceDetector(document.getElementById('inputVideo'))
+    //const mtcnnResults = await faceapi.tinyFaceDetector(document.getElementById('inputVideo'))
 
     //console.log(mtcnnResults)
     //console.log(mtcnnResults.length)    
 
 
-    if (mtcnnResults.length>0) {
+    //if (mtcnnResults.length>0) {
 
         const input = document.getElementById('inputVideo')
         const fullFaceDescriptions = await faceapi.detectAllFaces(input, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors()
@@ -86,16 +86,16 @@ async function run2() {
         context.clearRect(0, 0, myCanvas.width, myCanvas.height);
 
         faceapi.drawDetection(overlay, boxesWithText)
-    } else {
-        //Clear canvas
-        let myCanvas = document.getElementById('overlay');
-        const context = myCanvas.getContext('2d');
-        context.clearRect(0, 0, myCanvas.width, myCanvas.height);
-    }
+//    } else {
+//        //Clear canvas
+//        let myCanvas = document.getElementById('overlay');
+//        const context = myCanvas.getContext('2d');
+//        context.clearRect(0, 0, myCanvas.width, myCanvas.height);
+//    }
 }
 
 async function onPlay(videoEl) {
-    run2()
+    await run2()
     setTimeout(() => onPlay(videoEl))
 } 
 
