@@ -1,12 +1,8 @@
 //See https://github.com/justadudewhohacks/face-api.js/issues/130
 
-//const MODEL_URL = '/models'
-//const labels = ['sheldon', 'raj', 'leonard', 'howard']
-
 let labeledFaceDescriptors;
 
 async function run1() {
-    //console.log("run1 starting")
     const MODELS = "/models"; // Contains all the weights.
 
     //await faceapi.loadSsdMobilenetv1Model(MODELS)
@@ -14,10 +10,11 @@ async function run1() {
     await faceapi.loadFaceLandmarkModel(MODELS)
     await faceapi.loadFaceRecognitionModel(MODELS)
 
-    //console.log("models loaded?")
+    console.log("models loaded, calculating labeledFaceDescriptors")
 
     const labels = ['sheldon','howard', 'andreas', 'guy_with_hat']
     const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 160 })
+
 
     labeledFaceDescriptors = await Promise.all(
         labels.map(async label => {
@@ -35,11 +32,11 @@ async function run1() {
             }
 
             const faceDescriptors = [fullFaceDescription.descriptor]
-            //console.log("ending labeledFaceDescriptors function")
+            
             return new faceapi.LabeledFaceDescriptors(label, faceDescriptors)
         })     
     )
-
+    console.log("Calculated all labeledFaceDescriptors ")
 
     // try to access users webcam and stream the images
     // to the video element
@@ -49,18 +46,10 @@ async function run1() {
         stream => videoEl.srcObject = stream,
         err => console.error(err)
     )
+    console.log("Starting video")
 }
 
-async function run2() {
-
-    //const mtcnnResults = await faceapi.ssdMobilenetv1(document.getElementById('inputVideo'))
-    //const mtcnnResults = await faceapi.tinyFaceDetector(document.getElementById('inputVideo'))
-
-    //console.log(mtcnnResults)
-    //console.log(mtcnnResults.length)    
-
-
-    //if (mtcnnResults.length>0) {
+async function recognise() {
 
         const input = document.getElementById('inputVideo')
         const fullFaceDescriptions = await faceapi.detectAllFaces(input, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors()
@@ -86,16 +75,10 @@ async function run2() {
         context.clearRect(0, 0, myCanvas.width, myCanvas.height);
 
         faceapi.drawDetection(overlay, boxesWithText)
-//    } else {
-//        //Clear canvas
-//        let myCanvas = document.getElementById('overlay');
-//        const context = myCanvas.getContext('2d');
-//        context.clearRect(0, 0, myCanvas.width, myCanvas.height);
-//    }
 }
 
 async function onPlay(videoEl) {
-    await run2()
+    await recognise()
     setTimeout(() => onPlay(videoEl))
 } 
 
