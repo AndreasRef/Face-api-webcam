@@ -2,23 +2,27 @@
 
 var capture;
 
+function preload() {
+    loadModelsAndCalculateDescriptors()
+}
+
 function setup() {
-    createCanvas(640, 480);
+    let p5Canvas = createCanvas(640, 480);
+
+    p5Canvas.id('p5Canvas');
 
     capture = createCapture(VIDEO);
     capture.hide();
-
-    run1()
   }
   
   function draw() {
-    background(220);
-    image(capture, 0, 0);
+    //background(220);
+    //image(capture, 0, 0);
   }
 
 let labeledFaceDescriptors;
 
-async function run1() {
+async function loadModelsAndCalculateDescriptors() {
     const MODELS = "/models"; // Contains all the weights.
 
     //await faceapi.loadSsdMobilenetv1Model(MODELS)
@@ -57,6 +61,7 @@ async function run1() {
     // try to access users webcam and stream the images
     // to the video element
     const videoEl = document.getElementById('inputVideo')
+
     navigator.getUserMedia(
         { video: {} },
         stream => videoEl.srcObject = stream,
@@ -86,12 +91,12 @@ async function recognise() {
             return boxWithText
         })
 
-        //Clear canvas
-        let myCanvas = document.getElementById('overlay');
-        const context = myCanvas.getContext('2d');
-        context.clearRect(0, 0, myCanvas.width, myCanvas.height);
+        //let myCanvas = document.getElementById('p5Canvas');
+        //const context = myCanvas.getContext('2d');
+        //context.clearRect(0, 0, myCanvas.width, myCanvas.height);
+        image(capture, 0, 0);
 
-        faceapi.drawDetection(overlay, boxesWithText)
+        faceapi.drawDetection(p5Canvas, boxesWithText)
 }
 
 async function onPlay(videoEl) {
