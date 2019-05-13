@@ -97,6 +97,7 @@ async function recognise() {
         image(capture, 0, 0);
 
         faceapi.drawDetection(p5Canvas, boxesWithText)
+        //document.getElementById('inputVideo').style.display = "none";
 }
 
 async function onPlay(videoEl) {
